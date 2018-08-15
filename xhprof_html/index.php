@@ -1,8 +1,8 @@
 <?php
-if (!defined('XHPROF_LIB_ROOT')) {
-  define('XHPROF_LIB_ROOT', dirname(dirname(__FILE__)) . '/xhprof_lib');
-}
-require_once (XHPROF_LIB_ROOT . "/config.php");
+
+require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
+require_once XHPROF_CONFIG;
+
 include_once XHPROF_LIB_ROOT . '/display/xhprof.php';
 include (XHPROF_LIB_ROOT . "/utils/common.php");
 
