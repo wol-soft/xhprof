@@ -8,6 +8,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 }
 
 if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
+    debug('save profiling data');
     $profiler_namespace = $_xhprof['namespace'];  // namespace for your application
     $xhprof_data = call_user_func($_xhprof['ext_name'].'_disable');
     $xhprof_runs = new XHProfRuns_Default();

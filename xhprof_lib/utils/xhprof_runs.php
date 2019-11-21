@@ -426,9 +426,12 @@ class XHProfRuns_Default implements iXHProfRuns {
         $this->db->query($query);
         if ($this->db->affectedRows($this->db->linkID) == 1)
         {
+            debug("Inserted run $run_id");
             return $run_id;
         }else
         {
+            debug("Failed to insert run $run_id");
+
             global $_xhprof;
             if ($_xhprof['display'] === true)
             {

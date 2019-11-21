@@ -3,6 +3,13 @@
 require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
 require_once XHPROF_CONFIG;
 
+function debug($message)
+{
+    if (isset($_ENV['XHPROF_DEBUG']) && $_ENV['XHPROF_DEBUG']) {
+        echo $message . PHP_EOL;
+    }
+}
+
 if (PHP_SAPI == 'cli') {
   $_SERVER['REMOTE_ADDR'] = null;
   $_SERVER['HTTP_HOST'] = null;
@@ -24,6 +31,9 @@ function getExtensionName()
     return false;
 }
 $_xhprof['ext_name'] = getExtensionName();
+
+debug('Profiling Extension: ' . $_xhprof['ext_name']);
+
 if($_xhprof['ext_name'])
 {
     $flagsCpu = constant(strtoupper($_xhprof['ext_name']).'_FLAGS_CPU');
@@ -81,7 +91,12 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
       $_xhprof['display'] = true;
       $_xhprof['doprofile'] = true;
       $_xhprof['type'] = 1;
+
+      debug('Do profile');
+  } else {
+      debug('Skip profile');
   }
+
   unset($envVarName);
 }
 
@@ -116,9 +131,12 @@ if ($_xhprof['doprofile'] === false && $weight)
     //Profile weighting, one in one hundred requests will be profiled without being specifically requested
     if (rand(1, $weight) == 1)
     {
+        debug('Do profile by weight');
         $_xhprof['doprofile'] = true;
         $_xhprof['type'] = 0;
-    } 
+    } else {
+        debug('Skip profile by weight');
+    }
 }
 unset($weight);
 
@@ -126,6 +144,7 @@ unset($weight);
 foreach($ignoreURLs as $url){
     if (stripos($_SERVER['REQUEST_URI'], $url) !== FALSE)
     {
+        debug('Skip profile by ignored URL');
         $_xhprof['doprofile'] = false;
         break;
     }
@@ -138,6 +157,7 @@ unset($url);
 foreach($ignoreDomains as $domain){
     if (stripos($_SERVER['HTTP_HOST'], $domain) !== FALSE)
     {
+        debug('Skip profile by ignored domain');
         $_xhprof['doprofile'] = false;
         break;
     }
@@ -147,6 +167,7 @@ unset($domain);
 
 //Display warning if extension not available
 if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
+    debug('Init profiler');
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_lib.php';
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_runs.php';
     if (isset($ignoredFunctions) && is_array($ignoredFunctions) && !empty($ignoredFunctions)) {   
