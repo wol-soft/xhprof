@@ -18,4 +18,17 @@ if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
         $profiler_url = sprintf($_xhprof['url'].'/index.php?run=%s&source=%s', $run_id, $profiler_namespace);
         echo '<a href="'. $profiler_url .'" target="_blank">Profiler output</a>';
     }
+
+    if (getenv('XHPROF_GENERATE_RUN_IMAGE')) {
+        ob_start();
+
+        $run = $run_id;
+        require __DIR__ . '/../xhprof_html/callgraph.php';
+
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        @mkdir(__DIR__ . '/../result');
+        file_put_contents(__DIR__ . "/../result/$run_id.png", $content);
+    }
 }
