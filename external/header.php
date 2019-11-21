@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../xhprof_lib/defaults.php';
 require_once __DIR__ . '/../xhprof_lib/functions.php';
 
-require_once XHPROF_CONFIG;
+require XHPROF_CONFIG;
 
 if (PHP_SAPI == 'cli') {
   $_SERVER['REMOTE_ADDR'] = null;
