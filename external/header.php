@@ -184,10 +184,14 @@ if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     trigger_error($message, E_USER_WARNING);
 }
 unset($flagsCpu);
-    unset($flagsMemory);
-function xhprof_shutdown_function() {
-    global $_xhprof;
-    require dirname(__FILE__).'/footer.php';
-}
+unset($flagsMemory);
 
-register_shutdown_function('xhprof_shutdown_function');
+if (!getenv('XHPROF_MANUAL_SHUTDOWN')) {
+    function xhprof_shutdown_function()
+    {
+        global $_xhprof;
+        require dirname(__FILE__) . '/footer.php';
+    }
+
+    register_shutdown_function('xhprof_shutdown_function');
+}
