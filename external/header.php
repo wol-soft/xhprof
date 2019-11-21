@@ -5,7 +5,7 @@ require_once XHPROF_CONFIG;
 
 function debug($message)
 {
-    if (isset($_ENV['XHPROF_DEBUG']) && $_ENV['XHPROF_DEBUG']) {
+    if (getenv('XHPROF_DEBUG')) {
         echo $message . PHP_EOL;
     }
 }
@@ -86,7 +86,7 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
   
   if (isset($_COOKIE['_profile']) && $_COOKIE['_profile'] 
           || PHP_SAPI == 'cli' && ( (isset($_SERVER[$envVarName]) && $_SERVER[$envVarName]) 
-          || (isset($_ENV[$envVarName]) && $_ENV[$envVarName])))
+          || getenv($envVarName)))
   {
       $_xhprof['display'] = true;
       $_xhprof['doprofile'] = true;
