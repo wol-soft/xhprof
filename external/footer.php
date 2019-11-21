@@ -23,12 +23,12 @@ if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     if (getenv('XHPROF_GENERATE_RUN_IMAGE')) {
         ob_start();
 
-        $run = $run_id;
         require __DIR__ . '/../xhprof_html/callgraph.php';
 
         $content = ob_get_contents();
         ob_end_clean();
 
+        debug("save callgraph to $run_id.png");
         @mkdir(__DIR__ . '/../result');
         file_put_contents(__DIR__ . "/../result/$run_id.png", $content);
     }
