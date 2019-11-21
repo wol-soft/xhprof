@@ -1,14 +1,9 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/xhprof_lib/defaults.php';
-require_once XHPROF_CONFIG;
+require_once __DIR__ . '/../xhprof_lib/defaults.php';
+require_once __DIR__ . '/../xhprof_lib/functions.php';
 
-function debug($message)
-{
-    if (getenv('XHPROF_DEBUG')) {
-        echo $message . PHP_EOL;
-    }
-}
+require_once XHPROF_CONFIG;
 
 if (PHP_SAPI == 'cli') {
   $_SERVER['REMOTE_ADDR'] = null;
@@ -16,20 +11,6 @@ if (PHP_SAPI == 'cli') {
   $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
 }
 
-function getExtensionName()
-{
-    if (extension_loaded('tideways'))
-    {
-        return 'tideways';
-    }elseif(extension_loaded('tideways_xhprof'))
-    {
-        return 'tideways_xhprof';
-    }elseif(extension_loaded('xhprof'))
-    {
-        return 'xhprof';
-    }
-    return false;
-}
 $_xhprof['ext_name'] = getExtensionName();
 
 debug('Profiling Extension: ' . $_xhprof['ext_name']);
@@ -39,31 +20,6 @@ if($_xhprof['ext_name'])
     $flagsCpu = constant(strtoupper($_xhprof['ext_name']).'_FLAGS_CPU');
     $flagsMemory = constant(strtoupper($_xhprof['ext_name']).'_FLAGS_MEMORY');
     $envVarName = strtoupper($_xhprof['ext_name']).'_PROFILE';
-}
-
-
-//I'm Magic :)
-class visibilitator
-{
-	public static function __callstatic($name, $arguments)
-	{
-		$func_name = array_shift($arguments);
-		//var_dump($name);
-		//var_dump("arguments" ,$arguments);
-		//var_dump($func_name);
-		if (is_array($func_name))
-		{
-			list($a, $b) = $func_name;
-			if (count($arguments) == 0)
-			{
-				$arguments = $arguments[0];
-			}
-			return call_user_func_array(array($a, $b), $arguments);
-			//echo "array call  -> $b ($arguments)";
-		}else {
-			call_user_func_array($func_name, $arguments);
-		}
-	}
 }
 
 // Only users from authorized IP addresses may control Profiling
