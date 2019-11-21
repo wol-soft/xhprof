@@ -82,59 +82,55 @@ unset($domain_weight);
   * @param string $url The URL to be simplified
   * @return string The simplified URL 
   */
-  function _urlSimilartor($url)
-  {
-      //This is an example 
-      $url = preg_replace("!\d{4}!", "", $url);
-      
-      // For domain-specific configuration, you can use Apache setEnv xhprof_urlSimilartor_include [some_php_file]
-      if($similartorinclude = getenv('xhprof_urlSimilartor_include')) {
-      	require_once($similartorinclude);
-      }
-      
-      $url = preg_replace("![?&]_profile=\d!", "", $url);
-      return $url;
-  }
-  
-  function _aggregateCalls($calls, $rules = null)
-  {
-    $rules = array(
-        'Loading' => 'load::',
-        'mysql' => 'mysql_'
-        );
+  if (!function_exists('_urlSimilartor')) {
+      function _urlSimilartor($url)
+      {
+          //This is an example
+          $url = preg_replace("!\d{4}!", "", $url);
 
-    // For domain-specific configuration, you can use Apache setEnv xhprof_aggregateCalls_include [some_php_file]
-  	if(isset($run_details['aggregateCalls_include']) && strlen($run_details['aggregateCalls_include']) > 1)
-		{
-    	require_once($run_details['aggregateCalls_include']);
-		}        
-        
-    $addIns = array();
-    foreach($calls as $index => $call)
-    {
-        foreach($rules as $rule => $search)
-        {
-            if (strpos($call['fn'], $search) !== false)
-            {
-                if (isset($addIns[$search]))
-                {
-                    unset($call['fn']);
-                    foreach($call as $k => $v)
-                    {
-                        $addIns[$search][$k] += $v;
-                    }
-                }else
-                {
-                    $call['fn'] = $rule;
-                    $addIns[$search] = $call;
-                }
-                unset($calls[$index]);  //Remove it from the listing
-                break;  //We don't need to run any more rules on this
-            }else
-            {
-                //echo "nomatch for $search in {$call['fn']}<br />\n";
-            }
-        }
-    }
-    return array_merge($addIns, $calls);
+          // For domain-specific configuration, you can use Apache setEnv xhprof_urlSimilartor_include [some_php_file]
+          if ($similartorinclude = getenv('xhprof_urlSimilartor_include')) {
+              require_once($similartorinclude);
+          }
+
+          $url = preg_replace("![?&]_profile=\d!", "", $url);
+          return $url;
+      }
+  }
+
+  if (!function_exists('_aggregateCalls')) {
+      function _aggregateCalls($calls, $rules = null)
+      {
+          $rules = [
+              'Loading' => 'load::',
+              'mysql'   => 'mysql_'
+          ];
+
+          // For domain-specific configuration, you can use Apache setEnv xhprof_aggregateCalls_include [some_php_file]
+          if (isset($run_details['aggregateCalls_include']) && strlen($run_details['aggregateCalls_include']) > 1) {
+              require_once($run_details['aggregateCalls_include']);
+          }
+
+          $addIns = [];
+          foreach ($calls as $index => $call) {
+              foreach ($rules as $rule => $search) {
+                  if (strpos($call['fn'], $search) !== false) {
+                      if (isset($addIns[$search])) {
+                          unset($call['fn']);
+                          foreach ($call as $k => $v) {
+                              $addIns[$search][$k] += $v;
+                          }
+                      } else {
+                          $call['fn']      = $rule;
+                          $addIns[$search] = $call;
+                      }
+                      unset($calls[$index]);  //Remove it from the listing
+                      break;  //We don't need to run any more rules on this
+                  } else {
+                      //echo "nomatch for $search in {$call['fn']}<br />\n";
+                  }
+              }
+          }
+          return array_merge($addIns, $calls);
+      }
   }
