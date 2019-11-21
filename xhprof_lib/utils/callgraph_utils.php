@@ -58,6 +58,10 @@ function xhprof_http_header($name, $value) {
  * @author cjiang
  */
 function xhprof_generate_mime_header($type, $length) {
+    if (PHP_SAPI === 'cli') {
+        return;
+    }
+
   switch ($type) {
     case 'jpg':
       $mime = 'image/jpeg';
