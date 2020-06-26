@@ -57,7 +57,7 @@ $params = array(// run id param
                 // only functions whose exclusive time over the total time
                 // is larger than this threshold will be shown.
                 // default is 0.01.
-                'threshold' => array(XHPROF_FLOAT_PARAM, 0.001),
+                'threshold' => array(XHPROF_FLOAT_PARAM, 0.0001),
 
                 // whether to show critical_path
                 'critical' => array(XHPROF_BOOL_PARAM, true),
