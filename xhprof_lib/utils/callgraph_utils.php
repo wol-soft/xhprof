@@ -449,7 +449,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
                                     / $sym_table[$child]["wt"])
                   : "0.0%";
 
-      $taillabel = ($sym_table[$parent]["wt"] > 0) ?
+      $taillabel = ($sym_table[$parent]["wt"] > 0 && ($sym_table[$parent]["wt"] - $sym_table["$parent"]["excl_wt"]) > 0) ?
         sprintf("%.1f%%",
                 100 * $info["wt"] /
                 ($sym_table[$parent]["wt"] - $sym_table["$parent"]["excl_wt"]))
