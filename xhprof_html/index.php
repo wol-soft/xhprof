@@ -54,11 +54,11 @@ $xhprof_runs_impl = new XHProfRuns_Default();
 $domainFilter = getFilter('domain_filter');
 $serverFilter = getFilter('server_filter');
 
-$domainsRS = $xhprof_runs_impl->getDistinct(array('column' => 'server name'));
+$domainsRS = $xhprof_runs_impl->getDistinct(array('column' => 'server_name'));
 $domainFilterOptions = array("None");
 while ($row = XHProfRuns_Default::getNextAssoc($domainsRS))
 {
-	$domainFilterOptions[] = $row['server name'];
+	$domainFilterOptions[] = $row['server_name'];
 }
 
 $serverRS = $xhprof_runs_impl->getDistinct(array('column' => 'server_id'));
@@ -71,7 +71,7 @@ while ($row = XHProfRuns_Default::getNextAssoc($serverRS))
 $criteria = array();
 if (!is_null($domainFilter))
 {
-  $criteria['server name'] = $domainFilter;
+  $criteria['server_name'] = $domainFilter;
 }
 if (!is_null($serverFilter))
 {
