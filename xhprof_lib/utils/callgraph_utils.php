@@ -342,10 +342,10 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
   // performance bottleneck).
   $cur_id = 0; $max_wt = 0;
   foreach ($sym_table as $symbol => $info) {
-  /*  if (empty($func) && abs($info["wt"] / $totals["wt"]) < $threshold) {
+    if (empty($func) && abs($info["wt"] / $totals["wt"]) < $threshold) {
       unset($sym_table[$symbol]);
       continue;
-    }*/
+    }
     if ($max_wt == 0 || $max_wt < abs($info["excl_wt"])) {
       $max_wt = abs($info["excl_wt"]);
     }
