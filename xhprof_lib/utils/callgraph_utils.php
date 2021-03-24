@@ -318,7 +318,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
   }
 
   // use the function to filter out irrelevant functions.
-  /*if (!empty($func)) {
+  if (!empty($func)) {
     $interested_funcs = array();
     foreach ($raw_data as $parent_child => $info) {
       list($parent, $child) = xhprof_parse_parent_child($parent_child);
@@ -333,7 +333,7 @@ function xhprof_generate_dot_script($raw_data, $threshold, $source, $page,
       }
     }
   }
-*/
+
   $result = "digraph call_graph {\n";
 
   // Filter out functions whose exclusive time ratio is below threshold, and
